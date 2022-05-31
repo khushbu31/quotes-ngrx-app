@@ -1,0 +1,15 @@
+<mat-card>
+  <form [formGroup]="quoteForm">
+    <mat-label>Author</mat-label>
+    <mat-form-field appearance="outline">
+      <input type="text" matInput formControlName="author" />
+    </mat-form-field>
+    <mat-label>Quote</mat-label>
+    <mat-form-field appearance="outline">
+      <textarea type="text" matInput formControlName="quote" rows="5"></textarea>
+    </mat-form-field>
+    <div class="actions">
+      <button class="btn">Add Quote</button>
+    </div>
+  </form>
+</mat-card>

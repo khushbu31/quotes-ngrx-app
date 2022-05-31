@@ -1,0 +1,21 @@
+<div class="sorting">
+  <button>Sort Ascending</button>
+</div>
+<ul class="list">
+  <li class="item" *ngFor="let quote of quotes">
+    <figure>
+      <blockquote>
+        <p>{{quote.quote}}</p>
+      </blockquote>
+      <figcaption>{{quote.author}}</figcaption>
+    </figure>
+    <div class="actions">
+      <button class='btn'>
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button class='btn'>
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </li>
+</ul>
