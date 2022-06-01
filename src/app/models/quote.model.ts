@@ -1,5 +1,6 @@
 export interface QuoteModel {
-  id: string;
+  id?: string;
   quote: string;
   author: string;
+  objectId?: string;
 }

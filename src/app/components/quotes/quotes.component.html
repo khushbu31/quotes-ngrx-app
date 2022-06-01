@@ -1,8 +1,11 @@
 <div class="sorting">
-  <button>Sort Ascending</button>
+  <button (click)="sortData()">Sort Ascending</button>
+</div>
+<div *ngIf="showSpinner">
+  <mat-spinner></mat-spinner>
 </div>
 <ul class="list">
-  <li class="item" *ngFor="let quote of quotes">
+  <li class="item" *ngFor="let quote of quotes$ | async">
     <figure>
       <blockquote>
         <p>{{quote.quote}}</p>
@@ -10,10 +13,10 @@
       <figcaption>{{quote.author}}</figcaption>
     </figure>
     <div class="actions">
-      <button class='btn'>
+      <button class='btn' (click)="updateQuote(quote)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button class='btn'>
+      <button class='btn' (click)="deleteQuote(quote)">
         <mat-icon>delete</mat-icon>
       </button>
     </div>

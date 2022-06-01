@@ -7,6 +7,7 @@ const routes: Routes = [
   { path: '', redirectTo: 'quotes', pathMatch: 'full' },
   { path: 'quotes', component: QuotesComponent },
   { path: 'add-quote', component: AddQuoteComponent },
+  { path: 'edit-quote', component: AddQuoteComponent },
 ];
 
 @NgModule({
