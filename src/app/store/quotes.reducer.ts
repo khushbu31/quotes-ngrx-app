@@ -5,6 +5,7 @@ import {
   loadQuotes,
   loadQuotesFailure,
   loadQuotesSuccess,
+  sortQuotes,
   sumbitQuote,
   updateQuote,
 } from './quotes.actions';
@@ -69,6 +70,24 @@ export const quoteReducer = createReducer(
     return {
       ...state,
       quotes: allQuotes,
+    };
+  }),
+
+  on(sortQuotes, (state, { sortType }) => {
+    const allQuotes = [...state.quotes];
+    let quotes;
+    if (sortType === 'asc') {
+      quotes = allQuotes.sort((a, b) =>
+        a.quote.toLocaleLowerCase() >= b.quote.toLocaleLowerCase() ? 1 : -1
+      );
+    } else {
+      quotes = allQuotes.sort((a, b) =>
+        a.quote.toLocaleLowerCase() <= b.quote.toLocaleLowerCase() ? 1 : -1
+      );
+    }
+    return {
+      ...state,
+      quotes,
     };
   })
 );

@@ -5,7 +5,11 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { QuoteModel } from 'src/app/models/quote.model';
 import { AppState } from 'src/app/store/app.state';
-import { deleteQuote, loadQuotes } from 'src/app/store/quotes.actions';
+import {
+  deleteQuote,
+  loadQuotes,
+  sortQuotes,
+} from 'src/app/store/quotes.actions';
 import {
   getAllQuotes,
   getCurrentLoadStatus,
@@ -19,6 +23,7 @@ import {
 export class QuotesComponent implements OnInit {
   quotes$!: Observable<QuoteModel[]>;
   showSpinner!: boolean;
+  sortType!: boolean;
   constructor(
     private router: Router,
     private snackbar: MatSnackBar,
@@ -53,5 +58,10 @@ export class QuotesComponent implements OnInit {
     this.router.navigate(['edit-quote'], { state: { quote } });
   }
 
-  sortData() {}
+  sortData() {
+    this.sortType = !this.sortType;
+    this.store.dispatch(
+      sortQuotes({ sortType: this.sortType ? 'asc' : 'desc' })
+    );
+  }
 }

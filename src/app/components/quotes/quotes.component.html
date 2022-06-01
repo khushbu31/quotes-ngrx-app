@@ -1,5 +1,5 @@
 <div class="sorting">
-  <button (click)="sortData()">Sort Ascending</button>
+  <button (click)="sortData()">Sort {{!sortType ? 'Ascending' : 'Desending'}}</button>
 </div>
 <div *ngIf="showSpinner">
   <mat-spinner></mat-spinner>
