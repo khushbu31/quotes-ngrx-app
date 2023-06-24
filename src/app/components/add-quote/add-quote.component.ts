@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
@@ -10,7 +10,7 @@ import { sumbitQuote, updateQuote } from 'src/app/store/quotes.actions';
   templateUrl: './add-quote.component.html',
   styleUrls: ['./add-quote.component.scss'],
 })
-export class AddQuoteComponent implements OnInit {
+export class AddQuoteComponent {
   quoteForm: FormGroup;
   quoteTobeEdited: any;
   constructor(private store: Store<AppState>, private router: Router) {
@@ -26,8 +26,6 @@ export class AddQuoteComponent implements OnInit {
       ),
     });
   }
-
-  ngOnInit(): void {}
 
   submitQuote() {
     const quote = this.quoteForm.value;

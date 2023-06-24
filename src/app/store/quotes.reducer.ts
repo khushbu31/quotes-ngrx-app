@@ -14,7 +14,8 @@ import {
  * 1. What are Reducres ?
  * -> Reducers are responsible for handling transitions from one state to the next state in application.
  * -> Reducres are pure functions.
- * -> Pure functions function that always returns the same result if the same arguments are passed. It does not     depend on any state or data change during a program’s execution. Rather, it only depends on its input arguments.
+ * -> Pure functions are function that always returns the same result if the same arguments are passed. It does not
+ *    depend on any state or data change during a program’s execution. Rather, it only depends on its input arguments.
  * */
 
 export interface QuotesState {
@@ -56,7 +57,9 @@ export const quoteReducer = createReducer(
 
   on(deleteQuote, (state, { quote }) => ({
     ...state,
-    quotes: [...state.quotes.filter((quoteData) => quoteData.id !== quote.id)],
+    quotes: [...state.quotes.filter((quoteData) => {
+        console.log(quoteData);
+        return quoteData.id !== quote.id})],
   })),
 
   on(updateQuote, (state, { quote }) => {
