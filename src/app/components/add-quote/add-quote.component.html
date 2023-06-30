@@ -9,7 +9,7 @@
       <textarea type="text" matInput formControlName="quote" rows="5"></textarea>
     </mat-form-field>
     <div class="actions">
-      <button type="submit" (click)="submitQuote()" class="btn">Add Quote</button>
+      <button type="submit" (click)="submitQuote()" class="btn">{{ quoteTobeEdited ? 'Update Quote' : 'Add Quote'}} </button>
     </div>
   </form>
   <div *ngIf="showSpinner">

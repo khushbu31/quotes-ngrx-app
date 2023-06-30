@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
-import { sumbitQuote, updateQuote } from 'src/app/store/quotes.actions';
+import { submitQuote, updateQuote } from 'src/app/store/quotes.actions';
 import { getCurrentLoadStatus } from 'src/app/store/quotes.selector';
 
 @Component({
@@ -39,7 +39,7 @@ export class AddQuoteComponent {
       this.store.dispatch(updateQuote({ quote }));
     } else {
       quote.id = Date.now().toString();
-      this.store.dispatch(sumbitQuote({ quote }))
+      this.store.dispatch(submitQuote({ quote }))
     }
     this.store.select(getCurrentLoadStatus).subscribe((res) => {
       if (res === 'error') {

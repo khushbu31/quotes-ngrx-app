@@ -12,7 +12,7 @@ export const loadQuotesFailure = createAction(
   props<{ error: string }>()
 );
 
-export const sumbitQuote = createAction(
+export const submitQuote = createAction(
   '[ADD QUOTE] SUBMIT QUOTE',
   props<{ quote: QuoteModel }>()
 );

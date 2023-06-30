@@ -11,7 +11,7 @@ import {
   loadQuotes,
   loadQuotesFailure,
   loadQuotesSuccess,
-  sumbitQuote,
+  submitQuote,
   updateQuote,
   updateQuotesSuccess,
 } from './quotes.actions';
@@ -41,7 +41,7 @@ export class QuoteEffects {
   submitQuote$ = createEffect(
     () =>
       this.action$.pipe(
-        ofType(sumbitQuote),
+        ofType(submitQuote),
         switchMap(({ quote }) =>
           from(
             this.quoteService.addQuote(quote).pipe(
