@@ -43,15 +43,24 @@ export class QuotesComponent implements OnInit {
       }
       if (res === 'success') {
         this.showSpinner = false;
-        this.snackbar.open('Successfully Done', 'Thank you', {
-          duration: 3000,
-        });
       }
     });
   }
 
   deleteQuote(quote: QuoteModel) {
     this.store.dispatch(deleteQuote({ quote }));
+    this.store.select(getCurrentLoadStatus).subscribe((res) => {
+      if (res === 'error') {
+        this.showSpinner = false;
+        this.snackbar.open('Something went wrong', 'Ok', { duration: 3000 });
+      }
+      if (res === 'loading') {
+        this.showSpinner = true;
+      }
+      if (res === 'success') {
+        this.showSpinner = false;
+      }
+    });
   }
 
   updateQuote(quote: QuoteModel) {

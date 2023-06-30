@@ -23,12 +23,13 @@ import { quoteReducer } from './store/quotes.reducer';
     SharedModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    StoreDevtoolsModule.instrument({
-      maxAge: 25,
-      logOnly: environment.production,
-    }),
     StoreModule.forRoot({ quotes: quoteReducer }),
     EffectsModule.forRoot([QuoteEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      name: 'NgRx Demo App',
+      logOnly: environment.production,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

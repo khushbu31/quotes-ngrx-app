@@ -12,4 +12,7 @@
       <button type="submit" (click)="submitQuote()" class="btn">Add Quote</button>
     </div>
   </form>
+  <div *ngIf="showSpinner">
+    <mat-spinner></mat-spinner>
+  </div>
 </mat-card>

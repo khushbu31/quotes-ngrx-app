@@ -27,6 +27,21 @@ export const updateQuote = createAction(
   props<{ quote: QuoteModel }>()
 );
 
+export const updateQuotesSuccess = createAction(
+  '[QUOTES PAGE] UPDATE QUOTE SUCCESS',
+  props<{ quote: QuoteModel }>()
+);
+
+export const addQuotesSuccess = createAction(
+  '[QUOTES PAGE] ADD QUOTE SUCCESS',
+  props<{ quote: QuoteModel }>()
+);
+
+export const deleteQuotesSuccess = createAction(
+  '[QUOTES PAGE] DELETE QUOTE SUCCESS',
+  props<{ quote: QuoteModel }>()
+);
+
 export const sortQuotes = createAction(
   '[QUOTE PAGE] SORT QUOTE',
   props<{ sortType: string }>()

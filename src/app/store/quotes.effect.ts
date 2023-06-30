@@ -5,12 +5,15 @@ import { catchError, from, map, of, switchMap, tap } from 'rxjs';
 import { QuoteService } from '../services/quote.service';
 import { AppState } from './app.state';
 import {
+  addQuotesSuccess,
   deleteQuote,
+  deleteQuotesSuccess,
   loadQuotes,
   loadQuotesFailure,
   loadQuotesSuccess,
   sumbitQuote,
   updateQuote,
+  updateQuotesSuccess,
 } from './quotes.actions';
 
 @Injectable()
@@ -39,9 +42,16 @@ export class QuoteEffects {
     () =>
       this.action$.pipe(
         ofType(sumbitQuote),
-        switchMap(({ quote }) => this.quoteService.addQuote(quote))
+        switchMap(({ quote }) =>
+          from(
+            this.quoteService.addQuote(quote).pipe(
+              map((quotes) => addQuotesSuccess({ quote })),
+              catchError((error) => of(loadQuotesFailure(error)))
+            )
+          )
+        )
       ),
-    { dispatch: false } // Most effects dispatch another action, but this one is just a "fire and forget" effect
+    // { dispatch: false } // Most effects dispatch another action, but this one is just a "fire and forget" effect
   );
 
   deleteQuote$ = createEffect(
@@ -51,10 +61,12 @@ export class QuoteEffects {
         switchMap(({ quote }) =>
           this.quoteService
             .deleteQuote(quote)
-            .pipe(catchError((error) => of(loadQuotesFailure({ error }))))
+            .pipe(
+              map((res) => deleteQuotesSuccess({ quote })),
+              catchError((error) => of(loadQuotesFailure({ error })))
+            )
         )
-      )
-    // { dispatch: false }
+      ),
   );
 
   updateQuote$ = createEffect(() =>
@@ -62,13 +74,10 @@ export class QuoteEffects {
       ofType(updateQuote),
       switchMap(({ quote }) =>
         from(
-          this.quoteService
-            .updateQuote(quote)
-            .pipe(
-              catchError((error) =>
-                of(this.store.dispatch(loadQuotesFailure({ error })))
-              )
-            )
+          this.quoteService.updateQuote(quote).pipe(
+            map((quotes) => updateQuotesSuccess({ quote })),
+            catchError((error) => of(loadQuotesFailure(error)))
+          )
         )
       )
     )

@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.state';
 import { sumbitQuote, updateQuote } from 'src/app/store/quotes.actions';
+import { getCurrentLoadStatus } from 'src/app/store/quotes.selector';
 
 @Component({
   selector: 'app-add-quote',
@@ -13,7 +15,8 @@ import { sumbitQuote, updateQuote } from 'src/app/store/quotes.actions';
 export class AddQuoteComponent {
   quoteForm: FormGroup;
   quoteTobeEdited: any;
-  constructor(private store: Store<AppState>, private router: Router) {
+  showSpinner = false;
+  constructor(private store: Store<AppState>, private router: Router, private snackbar: MatSnackBar) {
     this.quoteTobeEdited =
       this.router.getCurrentNavigation()?.extras.state?.['quote'];
 
@@ -28,6 +31,7 @@ export class AddQuoteComponent {
   }
 
   submitQuote() {
+  this.showSpinner = true;
     const quote = this.quoteForm.value;
     if (this.quoteTobeEdited) {
       quote.id = this.quoteTobeEdited.id;
@@ -35,8 +39,19 @@ export class AddQuoteComponent {
       this.store.dispatch(updateQuote({ quote }));
     } else {
       quote.id = Date.now().toString();
-      this.store.dispatch(sumbitQuote({ quote }));
+      this.store.dispatch(sumbitQuote({ quote }))
     }
-    this.router.navigate(['quotes']);
+    this.store.select(getCurrentLoadStatus).subscribe((res) => {
+      if (res === 'error') {
+        this.showSpinner = false;
+        this.snackbar.open('Something went wrong', 'Ok', { duration: 3000 });
+      }
+      if (res === 'loading') {
+        this.showSpinner = true;
+      }
+      if (res === 'success') {
+        this.router.navigate(['quotes']);
+      }
+    });
   }
 }

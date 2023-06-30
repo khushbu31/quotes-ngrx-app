@@ -59,16 +59,16 @@ export class QuoteService {
 
   deleteQuote(quote: QuoteModel): Observable<any> {
     return this.http.delete<any>(
-      `https://quotes-280e4-default-rtdb.firebaseio.com/quotes.json/` +
-        quote.objectId
+      `https://quotes-280e4-default-rtdb.firebaseio.com/quotes/` +
+        quote.objectId + `.json`
     );
   }
 
   updateQuote(quote: QuoteModel): Observable<any> {
     return this.http.put<QuotesState>(
-      `https://quotes-280e4-default-rtdb.firebaseio.com/quotes.json/` +
-        quote.objectId,
-      { quote }
+      `https://quotes-280e4-default-rtdb.firebaseio.com/quotes/` +
+        quote.objectId + `.json`,
+      { ...quote }
     );
   }
 }

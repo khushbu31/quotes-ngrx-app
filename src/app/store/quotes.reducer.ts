@@ -1,13 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
 import { QuoteModel } from '../models/quote.model';
 import {
+  addQuotesSuccess,
   deleteQuote,
+  deleteQuotesSuccess,
   loadQuotes,
   loadQuotesFailure,
   loadQuotesSuccess,
   sortQuotes,
   sumbitQuote,
   updateQuote,
+  updateQuotesSuccess,
 } from './quotes.actions';
 
 /**
@@ -21,7 +24,7 @@ import {
 export interface QuotesState {
   quotes: QuoteModel[];
   error: string | null;
-  status: 'loading' | 'error' | 'success';
+  status: 'loading' | 'error' | 'success'
 }
 
 export const initialState: QuotesState = {
@@ -43,26 +46,24 @@ export const quoteReducer = createReducer(
 
   on(loadQuotesFailure, (state) => ({ ...state, status: 'error' })),
 
-  on(sumbitQuote, (state, { quote }) => ({
+  on(sumbitQuote, (state) => {
+    return {
+      ...state,
+      status: 'loading'
+    }
+  }),
+
+  on(deleteQuote, (state) => ({
     ...state,
-    quotes: [
-      ...state.quotes,
-      {
-        id: quote.id,
-        quote: quote.quote,
-        author: quote.author,
-      },
-    ],
+    status: 'loading'
   })),
 
-  on(deleteQuote, (state, { quote }) => ({
-    ...state,
-    quotes: [...state.quotes.filter((quoteData) => {
-        console.log(quoteData);
-        return quoteData.id !== quote.id})],
+  on(updateQuote, (state) => ({
+      ...state,
+      status: 'loading',
   })),
 
-  on(updateQuote, (state, { quote }) => {
+  on(updateQuotesSuccess, (state, { quote }) => {
     const allQuotes = [...state.quotes];
     const quoteIndex = allQuotes.findIndex(
       (element) => element.id === quote.id
@@ -73,6 +74,26 @@ export const quoteReducer = createReducer(
     return {
       ...state,
       quotes: allQuotes,
+      status: 'success',
+    };
+  }),
+
+  on(addQuotesSuccess, (state, { quote }) => {
+    const allQuotes = [...state.quotes];
+    allQuotes.push(quote);
+    return {
+      ...state,
+      quotes: allQuotes,
+      status: 'success'
+    };
+  }),
+
+  on(deleteQuotesSuccess, (state, { quote }) => {
+    const allQuotes = [...state.quotes];
+    return {
+      ...state,
+      quotes: allQuotes.filter((element) => element.id !== quote.id),
+      status: 'success'
     };
   }),
 
