@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { QuoteModel } from 'src/app/models/quote.model';
 import { AppState } from 'src/app/store/app.state';
 import {
@@ -20,10 +20,11 @@ import {
   templateUrl: './quotes.component.html',
   styleUrls: ['./quotes.component.scss'],
 })
-export class QuotesComponent implements OnInit {
+export class QuotesComponent implements OnInit, OnDestroy {
   quotes$!: Observable<QuoteModel[]>;
   showSpinner!: boolean;
   sortType!: boolean;
+  subscription!: Subscription;
   constructor(
     private router: Router,
     private snackbar: MatSnackBar,
@@ -33,10 +34,10 @@ export class QuotesComponent implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(loadQuotes());
     this.quotes$ = this.store.select(getAllQuotes);
-    this.store.select(getCurrentLoadStatus).subscribe((res) => {
+    this.subscription = this.store.select(getCurrentLoadStatus).subscribe((res) => {
       if (res === 'error') {
         this.showSpinner = false;
-        this.snackbar.open('Something went wrong', 'Ok', { duration: 3000 });
+        this.snackbar.open('Something went wrong', '', { duration: 3000 });
       }
       if (res === 'loading') {
         this.showSpinner = true;
@@ -49,15 +50,16 @@ export class QuotesComponent implements OnInit {
 
   deleteQuote(quote: QuoteModel) {
     this.store.dispatch(deleteQuote({ quote }));
-    this.store.select(getCurrentLoadStatus).subscribe((res) => {
+    this.subscription = this.store.select(getCurrentLoadStatus).subscribe((res) => {
       if (res === 'error') {
         this.showSpinner = false;
-        this.snackbar.open('Something went wrong', 'Ok', { duration: 3000 });
+        this.snackbar.open('Something went wrong', '', { duration: 3000 });
       }
       if (res === 'loading') {
         this.showSpinner = true;
       }
       if (res === 'success') {
+        this.snackbar.open('Quote Deleted Successfully!', '', { duration: 3000 });
         this.showSpinner = false;
       }
     });
@@ -72,5 +74,11 @@ export class QuotesComponent implements OnInit {
     this.store.dispatch(
       sortQuotes({ sortType: this.sortType ? 'asc' : 'desc' })
     );
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }

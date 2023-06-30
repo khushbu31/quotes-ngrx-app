@@ -15,7 +15,7 @@ body {
   padding: 0 10%;
   justify-content: space-between;
   align-items: center;
-  background-color: #008080;
+  background-color: #014040;
 }
 
 .logo {
@@ -36,12 +36,12 @@ body {
 
       a {
         text-decoration: none;
-        color: #88dfdf;
+        color: #d5f0f0;
 
         &:active,
         &.active,
         &:hover {
-          color: #e6fcfc;
+          color: #ffffff;
         }
       }
     }

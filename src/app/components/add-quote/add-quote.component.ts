@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/store/app.state';
 import { submitQuote, updateQuote } from 'src/app/store/quotes.actions';
 import { getCurrentLoadStatus } from 'src/app/store/quotes.selector';
@@ -12,10 +13,11 @@ import { getCurrentLoadStatus } from 'src/app/store/quotes.selector';
   templateUrl: './add-quote.component.html',
   styleUrls: ['./add-quote.component.scss'],
 })
-export class AddQuoteComponent {
+export class AddQuoteComponent implements OnDestroy {
   quoteForm: FormGroup;
   quoteTobeEdited: any;
   showSpinner = false;
+  subscription!: Subscription;
   constructor(private store: Store<AppState>, private router: Router, private snackbar: MatSnackBar) {
     this.quoteTobeEdited =
       this.router.getCurrentNavigation()?.extras.state?.['quote'];
@@ -41,17 +43,25 @@ export class AddQuoteComponent {
       quote.id = Date.now().toString();
       this.store.dispatch(submitQuote({ quote }))
     }
-    this.store.select(getCurrentLoadStatus).subscribe((res) => {
+    this.subscription = this.store.select(getCurrentLoadStatus).subscribe((res) => {
       if (res === 'error') {
         this.showSpinner = false;
-        this.snackbar.open('Something went wrong', 'Ok', { duration: 3000 });
+        this.snackbar.open('Something went wrong', '', { duration: 3000 });
       }
       if (res === 'loading') {
         this.showSpinner = true;
       }
       if (res === 'success') {
+        const msg = this.quoteTobeEdited ? 'Quote updated successfully!' : 'Quote Added successfully!'
+        this.snackbar.open(msg, '', { duration: 3000 });
         this.router.navigate(['quotes']);
       }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
